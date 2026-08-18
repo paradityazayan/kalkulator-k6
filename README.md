@@ -3,8 +3,7 @@
 Dua proyek web berbasis browser dari **Kelompok 6 RPL**, terinspirasi dunia mancing: game memancing 3D dan kalkulator bertema dermaga. Keduanya jalan langsung di browser tanpa install apa pun, tanpa backend, tanpa database — semua progres tersimpan otomatis lewat `localStorage`.
 
 **🔗 Main game di sini:** https://nononame66.github.ios/gigit-masalah/
-**🔗 Kalkulator di sini:** https://nononame66.github.io/tes/kalkulator/](https://paradityazayan.github.io/kalkulator-k6/calculator.html
-
+**🔗 Kalkulator di sini:** https://nononame66.github.io/tes/kalkulator/
 ---
 
 ## 📂 Struktur Repo
