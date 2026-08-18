@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Mancing Masalah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="calculator-style.css">
+</head>
+<body data-theme="light">
+
+  <div class="app-shell">
+
+    <!-- ══════════════ HEADER ══════════════ -->
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-eyebrow">Gigit Masalah &middot; Alat Dok</span>
+        <h1 class="brand-title">🎣 Kalkulator Mancing Masalah</h1>
+      </div>
+      <div class="header-controls">
+        <span class="kbd-indicator" id="kbd-indicator" title="Dukungan keyboard aktif">⌨ Keyboard Ready</span>
+        <button id="btn-theme" class="icon-btn" aria-label="Ganti tema terang/gelap" title="Ganti tema">🌙</button>
+        <button id="btn-sound" class="icon-btn" aria-label="Aktif/nonaktifkan suara" title="Suara">🔇</button>
+        <button id="btn-history" class="icon-btn" aria-label="Buka riwayat pancingan" title="Riwayat">📜</button>
+        <button id="btn-settings" class="icon-btn" aria-label="Buka pengaturan" title="Pengaturan">⚙️</button>
+      </div>
+    </header>
+
+    <!-- ══════════════ MASCOT / ADVENTURE PANEL ══════════════ -->
+    <section class="mascot-panel" aria-live="polite">
+      <div class="mascot-figure" id="mascot-figure" aria-hidden="true">
+        <svg viewBox="0 0 120 140" class="mascot-svg">
+          <ellipse cx="60" cy="128" rx="34" ry="8" fill="rgba(23,36,29,0.18)"></ellipse>
+          <!-- boots -->
+          <rect x="38" y="104" width="16" height="16" rx="4" fill="#8C6529"></rect>
+          <rect x="66" y="104" width="16" height="16" rx="4" fill="#8C6529"></rect>
+          <!-- body / raincoat -->
+          <path d="M30 60 Q60 40 90 60 L86 112 Q60 122 34 112 Z" fill="#33493C"></path>
+          <path d="M30 60 Q60 40 90 60 L88 74 Q60 58 32 74 Z" fill="#1C2E24"></path>
+          <!-- arms -->
+          <rect x="18" y="66" width="16" height="34" rx="8" fill="#33493C" id="mascot-arm-left"></rect>
+          <rect x="86" y="66" width="16" height="34" rx="8" fill="#33493C" id="mascot-arm-right" transform-origin="94px 68px"></rect>
+          <!-- rod in right hand -->
+          <g id="mascot-rod" transform-origin="96px 70px">
+            <line x1="96" y1="70" x2="112" y2="16" stroke="#B8863E" stroke-width="4" stroke-linecap="round"></line>
+            <line x1="112" y1="16" x2="118" y2="46" stroke="#EDE4D0" stroke-width="1.5"></line>
+          </g>
+          <!-- head -->
+          <circle cx="60" cy="42" r="22" fill="#9FE6A6"></circle>
+          <path d="M40 34 Q60 16 80 34 Q80 44 60 44 Q40 44 40 34 Z" fill="#B54A34"></path>
+          <circle cx="52" cy="42" r="3.4" fill="#17241D" id="mascot-eye-l"></circle>
+          <circle cx="68" cy="42" r="3.4" fill="#17241D" id="mascot-eye-r"></circle>
+          <path d="M50 52 Q60 58 70 52" stroke="#17241D" stroke-width="2.4" fill="none" stroke-linecap="round" id="mascot-mouth"></path>
+        </svg>
+      </div>
+      <div class="mascot-speech" id="mascot-speech" role="status">Siap mancing angka!</div>
+      <div class="mascot-rank">
+        <div class="rank-row">
+          <span class="rank-badge" id="rank-badge">Lvl <span id="rank-level">1</span></span>
+          <span class="rank-title" id="rank-title">Pemancing Pemula</span>
+        </div>
+        <div class="xp-track"><div class="xp-fill" id="xp-fill"></div></div>
+        <div class="xp-text" id="xp-text">0 / 100 XP</div>
+      </div>
+    </section>
+
+    <!-- ══════════════ MAIN CALCULATOR CARD ══════════════ -->
+    <main class="calculator-container">
+      <div class="torn-edge" aria-hidden="true"></div>
+      <div class="ticket-hole"></div>
+
+      <nav class="top-tabs" role="tablist" aria-label="Bagian kalkulator">
+        <button class="top-tab active" data-panel="panel-calc" role="tab" aria-selected="true">🎣 Kalkulator</button>
+        <button class="top-tab" data-panel="panel-convert" role="tab" aria-selected="false">📐 Konversi</button>
+      </nav>
+
+      <!-- ---------- CALCULATOR PANEL ---------- -->
+      <section id="panel-calc" class="tab-panel">
+
+        <div class="display-container">
+          <div class="lcd-indicator"><span class="lcd-dot"></span> STABIL <span id="memory-indicator" class="memory-indicator hidden">· MEMORY: <span id="memory-value">0</span></span></div>
+          <div class="history-display" id="history">0</div>
+          <div class="main-display" id="display" aria-live="polite">0</div>
+        </div>
+
+        <div class="mode-toggle" role="tablist" aria-label="Mode kalkulator">
+          <button class="mode-btn active" id="btn-basic" data-mode="basic">Dasar</button>
+          <button class="mode-btn" id="btn-scientific" data-mode="scientific">Presisi</button>
+        </div>
+
+        <!-- Memory row -->
+        <div class="memory-row" role="group" aria-label="Tombol memori">
+          <button class="mem-btn" data-mem="mc">MC</button>
+          <button class="mem-btn" data-mem="mr">MR</button>
+          <button class="mem-btn" data-mem="mplus">M+</button>
+          <button class="mem-btn" data-mem="mminus">M-</button>
+          <button class="mem-btn" data-mem="ms">MS</button>
+        </div>
+
+        <!-- Basic Mode Buttons -->
+        <div class="button-grid" id="basic-grid">
+          <button class="calc-btn secondary" data-action="clear">AC</button>
+          <button class="calc-btn secondary" data-action="delete">&#9003;</button>
+          <button class="calc-btn secondary" data-action="percent">%</button>
+          <button class="calc-btn operator" data-action="divide">&divide;</button>
+
+          <button class="calc-btn number" data-value="7">7</button>
+          <button class="calc-btn number" data-value="8">8</button>
+          <button class="calc-btn number" data-value="9">9</button>
+          <button class="calc-btn operator" data-action="multiply">&times;</button>
+
+          <button class="calc-btn number" data-value="4">4</button>
+          <button class="calc-btn number" data-value="5">5</button>
+          <button class="calc-btn number" data-value="6">6</button>
+          <button class="calc-btn operator" data-action="subtract">&minus;</button>
+
+          <button class="calc-btn number" data-value="1">1</button>
+          <button class="calc-btn number" data-value="2">2</button>
+          <button class="calc-btn number" data-value="3">3</button>
+          <button class="calc-btn operator" data-action="add">+</button>
+
+          <button class="calc-btn number span-2" data-value="0">0</button>
+          <button class="calc-btn number" data-value=".">.</button>
+          <button class="calc-btn equals" data-action="equals">=</button>
+        </div>
+
+        <!-- Scientific Mode Buttons -->
+        <div class="button-grid scientific-grid hidden" id="scientific-grid">
+          <button class="calc-btn secondary" data-action="clear">AC</button>
+          <button class="calc-btn secondary" data-action="delete">&#9003;</button>
+          <button class="calc-btn secondary" data-action="percent">%</button>
+          <button class="calc-btn secondary" data-action="parenthesis">()</button>
+
+          <button class="calc-btn function" data-action="sin">sin</button>
+          <button class="calc-btn function" data-action="cos">cos</button>
+          <button class="calc-btn function" data-action="tan">tan</button>
+          <button class="calc-btn operator" data-action="divide">&divide;</button>
+
+          <button class="calc-btn function" data-action="ln">ln</button>
+          <button class="calc-btn function" data-action="log">log</button>
+          <button class="calc-btn function" data-action="sqrt">&radic;</button>
+          <button class="calc-btn operator" data-action="multiply">&times;</button>
+
+          <button class="calc-btn number" data-value="7">7</button>
+          <button class="calc-btn number" data-value="8">8</button>
+          <button class="calc-btn number" data-value="9">9</button>
+          <button class="calc-btn operator" data-action="subtract">&minus;</button>
+
+          <button class="calc-btn number" data-value="4">4</button>
+          <button class="calc-btn number" data-value="5">5</button>
+          <button class="calc-btn number" data-value="6">6</button>
+          <button class="calc-btn operator" data-action="add">+</button>
+
+          <button class="calc-btn number" data-value="1">1</button>
+          <button class="calc-btn number" data-value="2">2</button>
+          <button class="calc-btn number" data-value="3">3</button>
+          <button class="calc-btn function" data-action="power">x&sup2;</button>
+
+          <button class="calc-btn function" data-action="pi">&pi;</button>
+          <button class="calc-btn number" data-value="0">0</button>
+          <button class="calc-btn number" data-value=".">.</button>
+          <button class="calc-btn equals" data-action="equals">=</button>
+        </div>
+      </section>
+
+      <!-- ---------- CONVERTER PANEL ---------- -->
+      <section id="panel-convert" class="tab-panel hidden">
+        <div class="converter-box">
+          <label class="conv-label" for="conv-category">Jenis Konversi</label>
+          <select id="conv-category" class="conv-select"></select>
+
+          <div class="conv-row">
+            <div class="conv-field">
+              <label class="conv-label" for="conv-from-value">Dari</label>
+              <input id="conv-from-value" class="conv-input" type="number" inputmode="decimal" value="1" aria-label="Nilai asal">
+              <select id="conv-from-unit" class="conv-select" aria-label="Satuan asal"></select>
+            </div>
+
+            <button id="btn-swap" class="swap-btn" aria-label="Tukar satuan" title="Tukar satuan">⇄</button>
+
+            <div class="conv-field">
+              <label class="conv-label" for="conv-to-value">Hasil</label>
+              <input id="conv-to-value" class="conv-input" type="text" readonly aria-label="Hasil konversi">
+              <select id="conv-to-unit" class="conv-select" aria-label="Satuan tujuan"></select>
+            </div>
+          </div>
+          <p class="conv-hint">Hasil dihitung otomatis &middot; nelayan dok memakai satuan ini buat nimbang tangkapan &amp; ngukur jarak lempar kail.</p>
+        </div>
+      </section>
+
+      <div class="credits-strip">
+        <div class="credits-seals">
+          <img class="credits-seal seal-a" src="assets/logo-kelompok6.jpg" alt="Lencana Kelompok 6 RPL">
+          <img class="credits-seal seal-b" src="assets/logo-rpl.jpg" alt="Lencana Jurusan RPL">
+          <img class="credits-seal seal-c" src="assets/logo-smkn1-sanden.jpg" alt="Lencana SMKN 1 Sanden Bantul">
+        </div>
+        <div class="credits-team">
+          <span class="credits-team-label">Kelompok 6 &middot; Gigit Masalah</span>
+          <span class="credits-team-names">Ardhi Muhammad &middot; Paraditya Zayan &middot; Ferdina &middot; Albrisam Durrany I.L.W.</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- ══════════════ FOOTER ══════════════ -->
+    <footer class="app-footer">
+      <div class="footer-stat"><span class="footer-label">Level</span><span class="footer-value" id="footer-level">1</span></div>
+      <span class="footer-perf" aria-hidden="true"></span>
+      <div class="footer-stat"><span class="footer-label">XP</span><span class="footer-value" id="footer-xp">0</span></div>
+      <span class="footer-perf" aria-hidden="true"></span>
+      <div class="footer-stat"><span class="footer-label">Lencana</span><span class="footer-value" id="footer-ach">0/5</span></div>
+      <span class="footer-perf" aria-hidden="true"></span>
+      <div class="footer-stat"><span class="footer-label">Total Hitung</span><span class="footer-value" id="footer-calcs">0</span></div>
+    </footer>
+  </div>
+
+  <!-- ══════════════ HISTORY DRAWER ══════════════ -->
+  <div id="history-drawer" class="drawer hidden" role="dialog" aria-label="Riwayat pancingan" aria-modal="true">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <h2>⚔️ Riwayat Pancingan</h2>
+        <button id="btn-close-history" class="close-btn" aria-label="Tutup riwayat">✕</button>
+      </div>
+      <div class="drawer-actions">
+        <button id="btn-clear-history" class="hd-btn secondary-btn">Hapus Semua</button>
+      </div>
+      <div id="history-list" class="history-list"></div>
+      <p id="history-empty" class="history-empty hidden">Belum ada tangkapan hitungan. Yuk mulai mancing angka!</p>
+    </div>
+  </div>
+
+  <!-- ══════════════ SETTINGS MODAL ══════════════ -->
+  <div id="settings-modal" class="modal-backdrop hidden" role="dialog" aria-label="Pengaturan" aria-modal="true">
+    <div class="modal-box settings-box">
+      <div class="drawer-header">
+        <h2>⚙️ Pengaturan Dok</h2>
+        <button id="btn-close-settings" class="close-btn" aria-label="Tutup pengaturan">✕</button>
+      </div>
+
+      <div class="setting-row">
+        <span>Tema</span>
+        <div class="segmented" id="setting-theme">
+          <button data-value="light" class="seg-btn active">☀️ Terang</button>
+          <button data-value="dark" class="seg-btn">🌙 Gelap</button>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span>Suara</span>
+        <div class="segmented" id="setting-sound">
+          <button data-value="off" class="seg-btn active">Mati</button>
+          <button data-value="on" class="seg-btn">Nyala</button>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span>Animasi</span>
+        <div class="segmented" id="setting-animation">
+          <button data-value="on" class="seg-btn active">Nyala</button>
+          <button data-value="off" class="seg-btn">Mati</button>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span>Getar (mobile)</span>
+        <div class="segmented" id="setting-vibration">
+          <button data-value="on" class="seg-btn active">Nyala</button>
+          <button data-value="off" class="seg-btn">Mati</button>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span>Format Angka</span>
+        <div class="segmented" id="setting-format">
+          <button data-value="plain" class="seg-btn active">1234.56</button>
+          <button data-value="grouped" class="seg-btn">1,234.56</button>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span>Angka Desimal</span>
+        <select id="setting-decimals" class="conv-select" style="width:auto;">
+          <option value="auto">Auto</option>
+          <option value="2">2</option>
+          <option value="4">4</option>
+          <option value="6">6</option>
+          <option value="8">8</option>
+        </select>
+      </div>
+
+      <div class="settings-footer">
+        <button id="btn-reset-data" class="reset-link">🗑️ Reset Semua Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ TOASTS ══════════════ -->
+  <div id="toast-region" class="toast-region" aria-live="polite"></div>
+
+  <script src="calculator-script.js"></script>
+</body>
+</html>
